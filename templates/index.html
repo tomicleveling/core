@@ -13,8 +13,8 @@
 	<h1>Todo List</h1>
 	<ul>
 		{{ range . }}
-		<li>{{ . }} </li>
-		<form hx-put="/{{ . }}" hx-swap="none">
+		<li>{{ .Title }} </li>
+		<form hx-put="/{{ .ID }}" hx-swap="none" hx-refresh="true">
 			<button type="submit">Complete</button>
 		</form>
 		{{end}}

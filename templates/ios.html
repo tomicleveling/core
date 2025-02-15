@@ -1,6 +1,3 @@
-<h1>Todo List</h1>
-<ul>
-	{{ range . }}
-	<li>{{ . }} </li>
-	{{end}}
-</ul>
+{{ range . }}
+{{ .Title }}
+{{end}}

@@ -2,12 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+type Task struct {
+	Title     string `json:"title"`
+	ID        int    `json:"id"`
+	Completed bool   `json:"completed"`
+}
 
 func main() {
 	mux := http.NewServeMux()
@@ -37,22 +44,23 @@ func todo(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Path: %s\n", path)
 	completeTask(initDB(), path)
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	w.Header().Set("HX-Refresh", "true")
+	w.WriteHeader(http.StatusOK)
 }
 
 func handleIOS(w http.ResponseWriter, r *http.Request) {
 	db := initDB()
 	defer db.Close()
-	todos := getTasks(db)
-	tmpl, err := template.ParseFiles("templates/ios.html")
+	// Call getTasksJson to get the tasks as JSON
+	tasksJson, err := getTasksJson(db)
 	if err != nil {
-		http.Error(w, "Error loading template", http.StatusInternalServerError)
+		http.Error(w, "Error retrieving tasks", http.StatusInternalServerError)
 		return
 	}
-	err = tmpl.Execute(w, todos)
-	if err != nil {
-		http.Error(w, "Error rendering template", http.StatusInternalServerError)
-	}
+
+	// Set the Content-Type to JSON and write the JSON response
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(tasksJson)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -126,37 +134,70 @@ func addTask(db *sql.DB, task string) {
 	}
 }
 
-func getTasks(db *sql.DB) []string {
-	rows, err := db.Query("SELECT title FROM tasks WHERE completed = false")
+func getTasks(db *sql.DB) []Task {
+	//I want to get title, id, and completed
+	rows, err := db.Query("SELECT title, id, completed FROM tasks WHERE completed = false")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 
-	var tasks []string
+	var tasks []Task
 	for rows.Next() {
-		var title string
-		err := rows.Scan(&title)
+		task := Task{}
+		err := rows.Scan(&task.Title, &task.ID, &task.Completed)
 		if err != nil {
 			log.Fatal(err)
 		}
-		tasks = append(tasks, title)
+		tasks = append(tasks, task)
 	}
 	if len(tasks) == 0 {
 		log.Println("No tasks found")
-		return []string{}
+		return nil
 	}
 
 	return tasks
 }
 
-func completeTask(db *sql.DB, name string) {
-	id, err := getTaskByName(db, name)
+func getTasksJson(db *sql.DB) ([]byte, error) {
+	// Query to get tasks from the database
+	rows, err := db.Query("SELECT title, id, completed FROM tasks WHERE completed = false")
 	if err != nil {
 		log.Fatal(err)
+		return nil, err
 	}
+	defer rows.Close()
+
+	var tasks []Task
+	// Loop through the query results and populate the tasks slice
+	for rows.Next() {
+		task := Task{}
+		err := rows.Scan(&task.Title, &task.ID, &task.Completed)
+		if err != nil {
+			log.Fatal(err)
+			return nil, err
+		}
+		tasks = append(tasks, task)
+	}
+	// Check if tasks are empty
+	if len(tasks) == 0 {
+		log.Println("No tasks found")
+		return nil, nil
+	}
+
+	// Marshal tasks into JSON
+	tasksJson, err := json.Marshal(tasks)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	return tasksJson, nil
+}
+
+func completeTask(db *sql.DB, id string) {
 	query := "UPDATE tasks SET completed = true WHERE id = ?"
-	_, err = db.Exec(query, id)
+	_, err := db.Exec(query, id)
 	if err != nil {
 		log.Fatal(err)
 	}
