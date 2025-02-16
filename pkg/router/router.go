@@ -26,7 +26,7 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 	fileServer := http.FileServer(http.Dir("static"))
 	router.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
-	router.HandleFunc("/home", serveHome)
+	router.HandleFunc("/profile", serveProfile)
 	router.HandleFunc("/login", loginHandler(auth))
 	router.HandleFunc("/callback", callbackHandler(auth))
 	router.HandleFunc("/logout", logoutHandler(auth))
@@ -163,7 +163,7 @@ func loginHandler(auth *authenticator.Authenticator) http.HandlerFunc {
 	}
 }
 
-func serveHome(w http.ResponseWriter, r *http.Request) {
+func serveProfile(w http.ResponseWriter, r *http.Request) {
 	isAuthed := isAuthenticated(r)
 	var data []string
 	if !isAuthed {
