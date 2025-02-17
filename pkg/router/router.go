@@ -138,7 +138,7 @@ func callbackHandler(auth *authenticator.Authenticator) http.HandlerFunc {
 
 		log.Println("COOKIE7")
 		auth.VerifyIDToken(r.Context(), token)
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 
 }
