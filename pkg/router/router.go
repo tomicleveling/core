@@ -30,6 +30,7 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 	router.HandleFunc("/login", loginHandler(auth))
 	router.HandleFunc("/callback", callbackHandler(auth))
 	router.HandleFunc("/logout", logoutHandler(auth))
+	router.HandleFunc("/quick", serveQuicktasks)
 	router.HandleFunc("/", index)
 	router.HandleFunc("/ios", handleIOS)
 	router.HandleFunc("/{name}", todo)
@@ -305,7 +306,60 @@ func index(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		tmpl, err := template.ParseFiles("templates/index.html")
+		tmpl, err := template.ParseFiles("templates/index.html", "templates/empty.html")
+		if err != nil {
+			http.Error(w, "Error loading template", http.StatusInternalServerError)
+			return
+		}
+		todos := database.GetTasks(db, user)
+		err = tmpl.Execute(w, todos)
+		if err != nil {
+			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		}
+
+	case http.MethodPost:
+		log.Println("POST request")
+		user, err := getProfileCookie(r)
+		if err != nil {
+			log.Println(err)
+		}
+		todo := r.FormValue("task")
+		database.AddTask(db, todo, user)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+
+	case http.MethodPut:
+		log.Println("PUT request")
+		user, err := getProfileCookie(r)
+		if err != nil {
+			log.Println(err)
+		}
+		todo := r.FormValue("task")
+		database.CompleteTask(db, todo, user)
+
+	case http.MethodOptions:
+		w.Header().Set("Allow", "GET, POST, OPTIONS")
+		w.WriteHeader(http.StatusNoContent)
+
+	default:
+		w.Header().Set("Allow", "GET, POST, OPTIONS")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+func serveQuicktasks(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/quick" {
+		http.NotFound(w, r)
+		return
+	}
+	db := database.InitDB()
+	defer db.Close()
+
+	switch r.Method {
+	case http.MethodGet:
+		user, err := getProfileCookie(r)
+		if err != nil {
+			log.Println(err)
+		}
+		tmpl, err := template.ParseFiles("templates/index.html", "templates/quicktasks.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
 			return

@@ -1,11 +1,11 @@
 body {
 	font-family: Arial, sans-serif;
-	background-color: #f0f0f0;
+	background-color: #001514;
 	padding: 20px;
 }
 
 h1 {
-	color: #333;
+	color: #EAEAEA;
 }
 
 ul {
@@ -14,7 +14,7 @@ ul {
 }
 
 li {
-	background: #fff;
+	color: #EAEAEA;
 	margin: 5px 0;
 	padding: 10px;
 	border-radius: 5px;
@@ -28,9 +28,113 @@ input[type="text"] {
 
 button {
 	padding: 8px 12px;
-	background-color: #5cb85c;
+	background-color: #0145EF;
 	color: white;
 	border: none;
+	border-color: #0145EF;
 	border-radius: 4px;
 	cursor: pointer;
+}
+
+.task-class button {
+	padding: 8px 12px;
+	background-color: #770000;
+	color: white;
+	border: none;
+	border-color: #0145EF;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	margin-bottom: 10px;
+	color: #D9DCD6;
+	background-color: #474747;
+}
+
+.complete-button {
+	margin-left: auto;
+	/* Pushes the button to the far right */
+}
+
+.container {
+	background-color: #474747;
+	font-size: 1.2rem;
+	font-family: "Merriweather Sans", sans-serif;
+	height: 70px;
+	border: 3px solid #ccc;
+	border-radius: 8px;
+	border-color: yellow;
+	display: flex;
+	align-items: center;
+	height: 100px;
+	width: 100%;
+}
+
+
+.navbar {
+	align-items: center;
+	/* Allows items to wrap */
+	height: 100%;
+	width: 80%;
+	border: 3px solid #ccc;
+	border-radius: 8px;
+	border-color: red;
+}
+
+.navbar ul {
+	display: flex;
+	border: 3px solid #ccc;
+	border-radius: 8px;
+	border-color: blue;
+	list-style: none;
+	gap: 15px;
+	/* Adds space between nav links */
+	flex-wrap: wrap;
+	/* Allows links to wrap */
+}
+
+.navbar ul a {
+	color: white;
+	text-decoration: none;
+}
+
+.logo {
+	border: 3px solid #ccc;
+	border-radius: 8px;
+	border-color: purple;
+	flex: 1;
+	/* Takes up remaining space */
+	text-wrap: nowrap;
+}
+
+@media (max-width: 600px) {
+	.navbar {
+		flex-direction: column;
+		/* Stacks items */
+		align-items: flex-start;
+		/* Aligns items to the left */
+		width: 100%;
+		/* Full width */
+	}
+
+	.logo {
+		width: 100%;
+		/* Ensures logo takes full width */
+		text-align: center;
+		/* Centers logo */
+	}
+
+	.navbar ul {
+		width: 100%;
+		/* Ensures nav takes full width */
+		justify-content: center;
+		/* Centers links */
+	}
 }

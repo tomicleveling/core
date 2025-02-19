@@ -1,0 +1,22 @@
+{{define "content"}}
+<div class="current-location">
+	<h1>Quicktasks</h1>
+</div>
+
+{{ range . }}
+<div class="task-class">
+	<div class="card">
+		{{ .Title }}
+		<div class="complete-button">
+			<form hx-put="/{{ .ID }}" hx-swap="none" hx-refresh="true">
+				<button type="submit">Complete</button>
+			</form>
+		</div>
+	</div>
+</div>
+{{end}}
+<form method="POST" action="/">
+	<input type="text" name="task" placeholder="New Task" required>
+	<button type="submit">Add</button>
+</form>
+{{end}}
