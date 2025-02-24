@@ -138,7 +138,10 @@ func callbackHandler(auth *authenticator.Authenticator) http.HandlerFunc {
 		log.Println(cookie2.Value)
 
 		log.Println("COOKIE7")
-		auth.VerifyIDToken(r.Context(), token)
+		_, err = auth.VerifyIDToken(r.Context(), token)
+		if err != nil {
+			log.Println(err)
+		}
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 
@@ -230,8 +233,12 @@ func getProfileCookie(r *http.Request) (string, error) {
 	}
 
 	decoded, err := url.QueryUnescape(retrievedCookie.Value)
+	if err != nil {
+		log.Println(err)
+	}
 	var profile map[string]string
 	if err := json.Unmarshal([]byte(decoded), &profile); err != nil {
+		log.Println("It works?")
 	}
 
 	// Return nickname
@@ -289,7 +296,10 @@ func handleIOS(w http.ResponseWriter, r *http.Request) {
 
 	// Set the Content-Type to JSON and write the JSON response
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(tasksJson)
+	_, err = w.Write(tasksJson)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
