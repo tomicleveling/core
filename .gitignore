@@ -7,6 +7,9 @@
 *.dll
 *.so
 *.dylib
+.envrc
+devbox.json
+devbox.lock
 
 # Test binary, built with `go test -c`
 *.test
