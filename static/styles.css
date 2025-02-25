@@ -91,7 +91,7 @@ a {
 	border-color: #EAEAEA;
 	color: #EAEAEA;
 	background-color: #474747;
-	padding-left: 100px;
+	padding-left: 10px;
 	height: 50px;
 	align-content: center;
 	align-items: center;
@@ -100,6 +100,10 @@ a {
 
 .card:hover {
 	background-color: darkgray;
+}
+
+.Title {
+	margin-right: auto;
 }
 
 input[type="text"] {
@@ -158,6 +162,7 @@ button:hover {
 	padding-left: 20px;
 }
 
+
 /* Hide the div when the screen is less than 600px wide */
 @media (max-width: 800px) {
 	.score {
@@ -175,5 +180,13 @@ button:hover {
 
 	.nav {
 		flex-wrap: wrap;
+	}
+
+	.Title {
+		font-size: 50%;
+	}
+
+	a {
+		font-size: 50%;
 	}
 }
