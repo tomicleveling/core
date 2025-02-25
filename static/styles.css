@@ -1,30 +1,117 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 body {
 	font-family: Arial, sans-serif;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 	background-color: #001514;
-	padding: 20px;
 }
 
-h1 {
-	color: #EAEAEA;
+a {
+	text-decoration: none;
+	color: inherit;
 }
 
-ul {
-	list-style-type: none;
-	padding: 0;
+.container {
+	display: grid;
+	grid-template-rows: 20% 80%;
+	/* Header, Content, Footer */
+	width: 50%;
+	height: 100%;
+	border: 3px solid #ccc;
+	border-radius: 35px;
+	border-color: #001514;
 }
 
-li {
-	color: #EAEAEA;
-	margin: 5px 0;
-	padding: 10px;
+.nav {
+	background-color: #001514;
+	color: white;
+	display: flex;
+	font-size: 1.5rem;
+	border: 1px solid #ccc;
+	border-radius: 1px;
+	justify-content: space-evenly;
+	height: 50px;
+	flex-wrap: wrap;
+}
+
+.nav-link {
+	align-content: center;
+	height: 100%;
+	justify-content: center;
+	text-align: center;
+	flex-grow: 1;
+}
+
+.nav-link:hover {
+	background-color: darkgray;
+}
+
+.content {
+	background-color: #001514;
+	color: white;
+	display: flex;
+	font-size: 1.5rem;
+	min-height: 200px;
+	flex-direction: column;
+	align-content: center;
+	border: 3px solid #ccc;
+	border-radius: 15px;
+	border-color: #001514;
+}
+
+.current-location {
+	padding-left: 10px;
+	padding-bottom: 10px;
+	justify-content: left;
+	height: 40px;
+	width: 250px;
+}
+
+.actual-content {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	align-content: center;
+	justify-content: center;
+	text-align: center;
+	gap: 10px;
+}
+
+.card {
+	display: flex;
+	flex-direction: row;
+	border: 1px solid;
 	border-radius: 5px;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	border-color: #EAEAEA;
+	color: #EAEAEA;
+	background-color: #474747;
+	padding-left: 100px;
+	height: 50px;
+	align-content: center;
+	align-items: center;
+}
+
+
+.card:hover {
+	background-color: darkgray;
 }
 
 input[type="text"] {
 	padding: 8px;
 	margin-right: 10px;
+	border-radius: 8px;
 }
+
+input[type="text"]:hover {
+	background-color: salmon;
+}
+
 
 button {
 	padding: 8px 12px;
@@ -34,107 +121,59 @@ button {
 	border-color: #0145EF;
 	border-radius: 4px;
 	cursor: pointer;
+	align-content: center;
 }
 
-.task-class button {
-	padding: 8px 12px;
-	background-color: #770000;
+button:hover {
+	background-color: salmon;
+}
+
+.complete-button button {
+	margin-right: 10px;
+	background-color: red;
 	color: white;
-	border: none;
-	border-color: #0145EF;
 	border-radius: 4px;
 	cursor: pointer;
+	align-content: center;
 }
 
-.card {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	margin-bottom: 10px;
-	color: #D9DCD6;
-	background-color: #474747;
+.complete-button button:hover {
+	background-color: salmon;
 }
 
-.complete-button {
+.points {
 	margin-left: auto;
-	/* Pushes the button to the far right */
+	margin-right: 30px;
 }
 
-.container {
-	background-color: #474747;
-	font-size: 1.2rem;
-	font-family: "Merriweather Sans", sans-serif;
-	height: 70px;
-	border: 3px solid #ccc;
-	border-radius: 8px;
-	border-color: yellow;
-	display: flex;
-	align-items: center;
-	height: 100px;
-	width: 100%;
-}
-
-
-.navbar {
-	align-items: center;
-	/* Allows items to wrap */
-	height: 100%;
-	width: 80%;
-	border: 3px solid #ccc;
-	border-radius: 8px;
-	border-color: red;
-}
-
-.navbar ul {
-	display: flex;
-	border: 3px solid #ccc;
-	border-radius: 8px;
-	border-color: blue;
-	list-style: none;
-	gap: 15px;
-	/* Adds space between nav links */
-	flex-wrap: wrap;
-	/* Allows links to wrap */
-}
-
-.navbar ul a {
+.score {
+	width: 1%;
 	color: white;
-	text-decoration: none;
-}
-
-.logo {
-	border: 3px solid #ccc;
-	border-radius: 8px;
-	border-color: purple;
-	flex: 1;
-	/* Takes up remaining space */
+	text-align: right;
 	text-wrap: nowrap;
 }
 
-@media (max-width: 600px) {
-	.navbar {
-		flex-direction: column;
-		/* Stacks items */
-		align-items: flex-start;
-		/* Aligns items to the left */
+.actual-score {
+	justify-items: left;
+	padding-left: 20px;
+}
+
+/* Hide the div when the screen is less than 600px wide */
+@media (max-width: 800px) {
+	.score {
+		display: none;
+	}
+}
+
+/* Make the container 100% width when the screen is 600px or smaller */
+@media (max-width: 800px) {
+	.container {
 		width: 100%;
-		/* Full width */
+		border-radius: 0;
+		/* Optional: Remove rounded corners for a full-width look */
 	}
 
-	.logo {
-		width: 100%;
-		/* Ensures logo takes full width */
-		text-align: center;
-		/* Centers logo */
-	}
-
-	.navbar ul {
-		width: 100%;
-		/* Ensures nav takes full width */
-		justify-content: center;
-		/* Centers links */
+	.nav {
+		flex-wrap: wrap;
 	}
 }

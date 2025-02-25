@@ -11,23 +11,32 @@
 
 <body>
 	<div class="container">
-		<div class="logo">
-			<h1>Tomic Leveling</h1>
-		</div>
-		<div class="navbar">
-			<nav>
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/quick">Quicktasks</a></li>
-					<li><a href="/profile">Profile</a></li>
-					<li><a href="/login">Login</a></li>
-					<li><a href="/logout">Logout</a></li>
-				</ul>
-			</nav>
-		</div>
+		<nav class="nav">
+			<a href="/" style="text-decoration: none; color: inherit;">
+				<div class="nav-link">Home</div>
+			</a>
+			<a href="/quick">
+				<div class="nav-link">Quicktasks</div>
+			</a>
+			<a href="/profile">
+				<div class="nav-link">Profile</div>
+			</a>
+			<a href="/login">
+				<div class="nav-link">Login</div>
+			</a>
+			<a href="logout">
+				<div class="nav-link">Logout</div>
+			</a>
+		</nav>
+		<main class="content">
+			{{template "content" .}}
+		</main>
 	</div>
-	<div class="content">
-		{{template "content" .}}
+	<div class="score">
+		<div class="actual-score">
+			<h3>LEVEL: 69</h3>
+			<h3>SCORE: 69420</h3>
+		</div>
 	</div>
 </body>
 

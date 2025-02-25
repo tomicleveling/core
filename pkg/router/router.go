@@ -388,7 +388,7 @@ func serveQuicktasks(w http.ResponseWriter, r *http.Request) {
 		}
 		todo := r.FormValue("task")
 		database.AddTask(db, todo, user)
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/quick", http.StatusSeeOther)
 
 	case http.MethodPut:
 		log.Println("PUT request")

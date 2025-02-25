@@ -1,22 +1,25 @@
 {{define "content"}}
 <div class="current-location">
-	<h1>Quicktasks</h1>
+	Quicktasks
 </div>
 
-{{ range . }}
 <div class="task-class">
-	<div class="card">
-		{{ .Title }}
-		<div class="complete-button">
-			<form hx-put="/{{ .ID }}" hx-swap="none" hx-refresh="true">
-				<button type="submit">Complete</button>
-			</form>
+	<div class="actual-content">
+		{{ range . }}
+		<div class="card">
+			<div class="Title">{{ .Title }}</div>
+			<div class="points">1</div>
+			<div class="complete-button">
+				<form hx-put="/{{ .ID }}" hx-swap="none" hx-refresh="true">
+					<button type="submit">Complete</button>
+				</form>
+			</div>
 		</div>
+		{{end}}
+		<form method="POST" action="/">
+			<input type="text" name="task" placeholder="New Task" required>
+			<button type="submit">Add</button>
+		</form>
 	</div>
 </div>
-{{end}}
-<form method="POST" action="/">
-	<input type="text" name="task" placeholder="New Task" required>
-	<button type="submit">Add</button>
-</form>
 {{end}}
