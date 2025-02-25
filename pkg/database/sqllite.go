@@ -123,3 +123,14 @@ func GetTaskByName(db *sql.DB, name string) (int, error) {
 	}
 	return id, nil
 }
+
+func EditTask(db *sql.DB, user,title, task string) error{
+	query := "UPDATE tasks SET title=? WHERE title = ? AND user = ?"
+	_,err := db.Exec(query, title, task, user)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+
+}
