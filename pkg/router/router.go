@@ -288,7 +288,8 @@ func handleIOS(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	tasksJson, err := database.GetTasksJson(db, user)
+	task := database.GetTasks(db, user)
+	tasksJson, err := database.ParseTask(task)
 	if err != nil {
 		http.Error(w, "Error retrieving tasks", http.StatusInternalServerError)
 		return

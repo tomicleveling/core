@@ -70,33 +70,8 @@ func GetTasks(db *sql.DB, user string) []Task {
 	return tasks
 }
 
-func GetTasksJson(db *sql.DB, user string) ([]byte, error) {
-	// Query to get tasks from the database
-	rows, err := db.Query("SELECT title, id, completed FROM tasks WHERE completed = 0 AND user = ?", user)
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-	defer rows.Close()
+func ParseTask(tasks []Task) ( []byte, error) {
 
-	var tasks []Task
-	// Loop through the query results and populate the tasks slice
-	for rows.Next() {
-		task := Task{}
-		err := rows.Scan(&task.Title, &task.ID, &task.Completed)
-		if err != nil {
-			log.Fatal(err)
-			return nil, err
-		}
-		tasks = append(tasks, task)
-	}
-	// Check if tasks are empty
-	if len(tasks) == 0 {
-		log.Println("No tasks found")
-		return nil, nil
-	}
-
-	// Marshal tasks into JSON
 	tasksJson, err := json.Marshal(tasks)
 	if err != nil {
 		log.Fatal(err)
@@ -105,6 +80,7 @@ func GetTasksJson(db *sql.DB, user string) ([]byte, error) {
 
 	return tasksJson, nil
 }
+
 
 func CompleteTask(db *sql.DB, id, user string) {
 	query := "UPDATE tasks SET completed = true WHERE id = ? AND user = ?"
@@ -122,4 +98,14 @@ func GetTaskByName(db *sql.DB, name string) (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+func EditTask(db *sql.DB, user,title, task string) error{
+	query := "UPDATE tasks SET title=? WHERE title = ? AND user = ?"
+	_,err := db.Exec(query, title, task, user)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
