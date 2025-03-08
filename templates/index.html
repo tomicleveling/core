@@ -33,9 +33,9 @@
 		</main>
 	</div>
 	<div class="score">
-		<div class="actual-score">
-			<h3>LEVEL: 69</h3>
-			<h3>SCORE: 69420</h3>
+		<div class="actual-score" hx-get="/score" hx-trigger="load, every 10s">
+			<h3>LEVEL: Loading...</h3>
+			<h3>SCORE: Loading...</h3>
 		</div>
 	</div>
 </body>

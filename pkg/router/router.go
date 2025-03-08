@@ -31,12 +31,25 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 	router.HandleFunc("/callback", callbackHandler(auth))
 	router.HandleFunc("/logout", logoutHandler(auth))
 	router.HandleFunc("/quick", serveQuicktasks)
+	router.HandleFunc("/score", score)
 	router.HandleFunc("/", index)
 	router.HandleFunc("/ios", handleIOS)
 	router.HandleFunc("/{name}", todo)
 	router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
 
 	return router
+}
+
+func score(w http.ResponseWriter, r *http.Request) {
+	user, err := getProfileCookie(r)
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println(user)
+	w.Header().Set("Content-Type", "text/html") // Ensure response is HTML
+	score := fmt.Sprintf("<h3>LEVEL: %d</h3><h3>SCORE: %d</h3>", 10, 100)
+	fmt.Fprintf(w, score)
 }
 
 func logoutHandler(auth *authenticator.Authenticator) http.HandlerFunc {
