@@ -13,6 +13,7 @@ type Task struct {
 	ID        int    `json:"id"`
 	Completed bool   `json:"completed"`
 	User      string `json:"user"`
+	Score     int    `json:"score"`
 }
 
 func InitDB() *sql.DB {
@@ -37,6 +38,27 @@ func InitDB() *sql.DB {
 	return db
 }
 
+func AlterDB() {
+	db, err := sql.Open("sqlite3", "./todo.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Add column
+	query := "ALTER TABLE tasks ADD COLUMN score INTEGER DEFAULT 1"
+	_, err = db.Exec(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Add column
+	query = "UPDATE tasks SET score = 1 WHERE score IS NULL"
+	_, err = db.Exec(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func AddTask(db *sql.DB, task, user string) {
 	query := "INSERT INTO tasks (title, completed, user) VALUES (?, ?, ?)"
 	_, err := db.Exec(query, task, 0, user)
@@ -47,7 +69,7 @@ func AddTask(db *sql.DB, task, user string) {
 
 func GetTasks(db *sql.DB, user string) []Task {
 	//I want to get title, id, and completed
-	rows, err := db.Query("SELECT title, id, completed, user FROM tasks WHERE completed = 0 AND user = ?", user)
+	rows, err := db.Query("SELECT title, id, completed, user, score FROM tasks WHERE completed = 0 AND user = ?", user)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +78,7 @@ func GetTasks(db *sql.DB, user string) []Task {
 	var tasks []Task
 	for rows.Next() {
 		task := Task{}
-		err := rows.Scan(&task.Title, &task.ID, &task.Completed, &task.User)
+		err := rows.Scan(&task.Title, &task.ID, &task.Completed, &task.User, &task.Score)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -122,4 +144,16 @@ func GetTaskByName(db *sql.DB, name string) (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+func GetScore(db *sql.DB, user string) int {
+	var score int
+
+	query := "SELECT COALESCE(SUM(score), 0) FROM tasks WHERE user = ? AND completed = true"
+	err := db.QueryRow(query, user).Scan(&score)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return score
 }

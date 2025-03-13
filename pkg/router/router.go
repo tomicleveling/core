@@ -32,12 +32,17 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 	router.HandleFunc("/logout", logoutHandler(auth))
 	router.HandleFunc("/quick", serveQuicktasks)
 	router.HandleFunc("/score", score)
+	router.HandleFunc("/db", updateDB)
 	router.HandleFunc("/", index)
 	router.HandleFunc("/ios", handleIOS)
 	router.HandleFunc("/{name}", todo)
 	router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
 
 	return router
+}
+
+func updateDB(w http.ResponseWriter, r *http.Request) {
+	database.AlterDB()
 }
 
 func score(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +53,9 @@ func score(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(user)
 	w.Header().Set("Content-Type", "text/html") // Ensure response is HTML
-	score := fmt.Sprintf("<h3>LEVEL: %d</h3><h3>SCORE: %d</h3>", 10, 100)
+	xp := database.GetScore(database.InitDB(), user)
+	level := GetLevel(xp)
+	score := fmt.Sprintf("<h3>LEVEL: %d</h3><h3>SCORE: %d</h3>", level, xp)
 	fmt.Fprintf(w, score)
 }
 
@@ -420,4 +427,16 @@ func serveQuicktasks(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Allow", "GET, POST, OPTIONS")
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+func GetLevel(xp int) int {
+	baseXP := 10.0 // XP required for level 1
+	level := 1
+
+	for xp >= int(baseXP) {
+		level++
+		baseXP *= 1.5 // Increase XP requirement by 50% each level
+	}
+
+	return level - 1 // Adjust because loop increments once past the max level
 }
