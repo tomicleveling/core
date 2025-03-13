@@ -44,7 +44,7 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 }
 
 func handleHook(w http.ResponseWriter, r *http.Request) {
-	cmd := exec.Command("nohup", "/bin/bash", "./cicd.sh", "&")
+	cmd := exec.Command("sudo", "nohup", "/bin/bash", "./cicd.sh", "&")
 	log.Println(cmd)
 }
 
