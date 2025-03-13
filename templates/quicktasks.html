@@ -8,7 +8,7 @@
 		{{ range . }}
 		<div class="card">
 			<div class="Title">{{ .Title }}</div>
-			<div class="points">1</div>
+			<div class="points">{{ .Score }}</div>
 			<div class="complete-button">
 				<form hx-put="/{{ .ID }}" hx-swap="none" hx-refresh="true">
 					<button type="submit">Complete</button>
