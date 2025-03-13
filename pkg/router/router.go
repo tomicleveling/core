@@ -44,6 +44,7 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 }
 
 func handleHook(w http.ResponseWriter, r *http.Request) {
+	log.Println("webhook hit")
 	cmd := exec.Command("sudo", "nohup", "/bin/bash", "./cicd.sh", "&")
 	log.Println(cmd)
 }
