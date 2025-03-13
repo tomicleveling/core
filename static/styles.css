@@ -67,14 +67,15 @@ a {
 }
 
 .current-location {
+	padding-top: 10px;
 	padding-left: 10px;
-	padding-bottom: 10px;
 	justify-content: left;
 	height: 40px;
 	width: 250px;
 }
 
 .actual-content {
+	padding-top: 20px;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -152,6 +153,7 @@ button:hover {
 }
 
 .score {
+	padding-top: 10px;
 	width: 1%;
 	color: white;
 	text-align: right;
