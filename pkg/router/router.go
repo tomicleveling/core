@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/tomicleveling/core/pkg/authenticator"
@@ -43,7 +44,8 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 }
 
 func handleHook(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Body)
+	cmd := exec.Command("nohup", "/bin/bash", "./cicd.sh", "&")
+	log.Println(cmd)
 }
 
 func updateDB(w http.ResponseWriter, r *http.Request) {
