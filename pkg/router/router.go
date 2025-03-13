@@ -34,11 +34,16 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 	router.HandleFunc("/score", score)
 	router.HandleFunc("/db", updateDB)
 	router.HandleFunc("/", index)
+	router.HandleFunc("/hook", handleHook)
 	router.HandleFunc("/ios", handleIOS)
 	router.HandleFunc("/{name}", todo)
 	router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {})
 
 	return router
+}
+
+func handleHook(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Body)
 }
 
 func updateDB(w http.ResponseWriter, r *http.Request) {
