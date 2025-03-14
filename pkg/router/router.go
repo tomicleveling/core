@@ -44,6 +44,7 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 }
 
 func handleHook(w http.ResponseWriter, r *http.Request) {
+	log.Println("Verifying Webhook works")
 	log.Println("webhook hit")
 	// Log the start of the process
 	log.Println("Starting deployment process...")
