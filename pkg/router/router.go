@@ -45,8 +45,18 @@ func InitRouter(auth *authenticator.Authenticator) *http.ServeMux {
 
 func handleHook(w http.ResponseWriter, r *http.Request) {
 	log.Println("webhook hit")
-	cmd := exec.Command("sudo", "nohup", "/bin/bash", "./cicd.sh", "&")
-	log.Println(cmd)
+	// Log the start of the process
+	log.Println("Starting deployment process...")
+
+	// Step 1: Run the script in the background using nohup and bash
+	cmd := exec.Command("bash", "-c", "nohup /home/myuser/core/cicd.sh > /home/myuser/core/cicd.log 2>&1 &")
+	if err := cmd.Start(); err != nil {
+		log.Fatalf("Failed to start script: %v", err)
+	}
+	log.Println("CI/CD script started in background.")
+
+	// Log the end of the deployment process
+	log.Println("Deployment process triggered successfully.")
 }
 
 func updateDB(w http.ResponseWriter, r *http.Request) {
